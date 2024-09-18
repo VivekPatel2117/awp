@@ -14,9 +14,9 @@ waiting_times = 0
 total_wait_time = 0
 print("\nProcess ID\tBurst Time\tWaiting Time")
 for i in range(n):
-    print(f"{burst_times[i]}\t\t{waiting_times}")
     total_wait_time += waiting_times
     waiting_times += burst_times[i]
+    print(f"{i + 1}\t\t{burst_times[i]}\t\t{waiting_times}")
 
 # Calculate average waiting time
 average_wait_time = total_wait_time / n
