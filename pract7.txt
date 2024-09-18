@@ -1,0 +1,23 @@
+Disk Utilities: Tools used to manage disk space, file systems, and storage devices. They help users monitor and manipulate disk usage.
+
+(df): Displays the amount of disk space used and available on file systems.
+
+Example: (df -h) shows disk usage in human-readable format (e.g., GB, MB).
+du: Displays disk usage for files and directories, showing how much space they occupy.
+
+Example: (du) -sh /path/to/directory gives the total size of the specified directory.
+mount: Attaches a file system to a directory, making it accessible.
+
+Example: mount /dev/sdb1 /mnt mounts the device sdb1 at the /mnt directory.
+unmount: Detaches a mounted file system, making it no longer accessible.
+
+Example: (umount /mnt) unmounts the file system mounted at /mnt.
+find: Searches for files and directories in a specified path based on various criteria.
+
+Example: (find /path/to/search -name "*.txt") finds all .txt files in the specified directory.
+unmask: Sets or displays the default file permission mask for new files and directories.
+
+Example: (umask) 022 sets the default permissions to 755 for directories and 644 for files.
+unlink: Removes a single file without using rm. It does not work on directories.
+
+Example: (unlink filename.txt) deletes filename.txt.

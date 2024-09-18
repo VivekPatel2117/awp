@@ -1,0 +1,33 @@
+ls: Lists files and directories in the current directory.
+
+Example: (ls) displays a  list of files and directories.
+mkdir: Creates a new directory.
+
+Example: (mkdir new_folder) creates a directory named new_folder.
+rmdir: Removes an empty directory.
+
+Example: (rmdir old_folder) deletes the directory old_folder if it is empty.
+file: Determines the type of a file.
+
+Example: (file example.txt) outputs the type of example.txt, such as "ASCII text."
+touch: Creates an empty file or updates the timestamp of an existing file.
+
+Example: (touch newfile.txt) creates newfile.txt if it doesn't exist.
+rm: Removes files or directories.
+
+Example: (rm file.txt) deletes file.txt. Use rm -r folder to remove a directory and its contents.
+cp: Copies files or directories.
+
+Example: (cp source.txt destination.txt ) copies source.txt to destination.txt.
+mv: Moves or renames files or directories.
+
+Example: (mv oldname.txt newname.txt) renames oldname.txt to newname.txt.
+rename: Renames multiple files based on a pattern.
+
+Example: (rename 's/.txt/.bak/' *.txt) changes all .txt files to .bak.
+cat: Concatenates and displays the content of files.
+
+Example:( cat file.txt) outputs the content of file.txt to the terminal.
+cat > filename: Creates or overwrites a file with input from the terminal.
+
+Example: (cat > newfile.txt) allows you to type text into newfile.txt; press CTRL+D to save.
