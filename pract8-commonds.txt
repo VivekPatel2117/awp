@@ -1,0 +1,20 @@
+grep: A powerful command-line utility used to search for specific patterns within files or output. It prints lines that match the given pattern.
+
+Example: grep "error" logfile.txt searches for the word "error" in logfile.txt and displays matching lines.
+sed: A stream editor for filtering and transforming text in a pipeline. It can perform complex text manipulations, including substitution and deletion.
+
+Example: sed 's/old/new/g' filename.txt replaces all occurrences of "old" with "new" in filename.txt.
+Processing Utilities: Tools used to process and manipulate data streams. Common utilities include:
+
+awk: A programming language for pattern scanning and processing. It can be used for tasks like extracting specific columns from files.
+Example: awk '{print $1}' filename.txt prints the first column of each line in filename.txt.
+Backup Utilities: Tools used to create backups of files and directories.
+
+tar: Used to archive multiple files into a single file and can compress it.
+Example: tar -czvf archive.tar.gz /path/to/directory creates a compressed archive of the specified directory.
+tail: Displays the last few lines of a file. Useful for monitoring log files.
+
+Example: tail -n 10 logfile.txt shows the last 10 lines of logfile.txt.
+head: Displays the first few lines of a file.
+
+Example: head -n 10 logfile.txt shows the first 10 lines of logfile.txt.

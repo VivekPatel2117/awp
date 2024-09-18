@@ -1,0 +1,23 @@
+Process: A process is an instance of a running program that includes the program code and its current activity. Each process has its own memory space and resources.
+
+Shell Process: This refers to processes that are initiated by a shell, such as Bash. When you execute a command in the shell, it creates a new process for that command.
+
+Process Commands: These are commands used to manage and interact with processes in the system. Common commands include ps, top, kill, and bg.
+
+ps: The ps command displays information about active processes. By default, it shows processes running in the current shell.
+
+Example: ps displays a list of processes for the current user.
+
+Options:
+
+ps -e: Displays all processes running on the system.
+ps -f: Shows processes in a full format, including PPID and start time.
+ps aux: Lists all running processes with detailed information, including CPU and memory usage.
+Utilities related to ps commands:
+
+top: Provides a dynamic view of running processes, updating in real time.
+Example: top shows a list of processes sorted by CPU usage.
+htop: An interactive process viewer that is more user-friendly than top.
+Example: htop allows you to sort and manage processes using keyboard shortcuts.
+pstree: Displays running processes in a tree format, showing parent-child relationships.
+Example: pstree presents a visual hierarchy of all processes.

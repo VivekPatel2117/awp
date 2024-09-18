@@ -1,0 +1,38 @@
+steps for shell programming
+cat > filename.sh
+--Write code here --
+after writing press ctr+D or ctr + C
+
+after that do chmod +x filename.sh
+
+
+Q1->
+program to print hello message
+code->
+echo "Hello, World!"
+
+Q2 ->
+program to add two numbers
+code->
+read -p "Enter first number: " num1
+
+# Read the second number
+read -p "Enter second number: " num2
+
+# Calculate the sum
+sum=$((num1 + num2))
+
+# Print the result
+echo "The sum of $num1 and $num2 is: $sum"
+
+Q3 ->
+3. Program to:
+1) Find how many users are logged in
+2) Count how many files and directories are in the current director
+
+# 1) Find how many users are logged in
+
+echo "Number of users logged in: $(who | wc -l)"
+
+# 2) Count how many files and directories are in the current directory
+echo "Number of files in the current directory: $(ls | w -l)"

@@ -1,0 +1,33 @@
+man: Displays the manual pages for commands, providing detailed information about usage and options.
+
+Example: (man ls) shows the manual for the ls command.
+echo: Outputs the given text or variables to the terminal.
+
+Example: (echo "Hello, World!") prints Hello, World!.
+printf: Formats and outputs data, similar to the C programming language's printf.
+
+Example: {printf "Name: \nSanket"} 10 prints Value: 10.
+script: Records a terminal session, saving all output to a file.
+
+Example: (script mysession.txt) starts recording the session in mysession.txt.
+passwd: Changes the user’s password.
+
+Example: (passwd) prompts for the current and new password.
+uname: Displays system information such as the kernel name, version, and more.
+
+Example: (uname -a) shows all system information.
+who: Lists currently logged-in users and their details.
+
+Example: (who) displays users along with their terminal and login time.
+date: Displays or sets the system date and time.
+
+Example: (date) shows the current date and time.
+stty: Changes and prints terminal line settings.
+
+Example: (stty -a) shows all current terminal settings.
+pwd: Prints the current working directory.
+
+Example: (pwd) might output /home/user, indicating the current location in the file system.
+bc: An arbitrary precision calculator language.
+
+Example: (echo "5 + 3" | bc) computes and outputs 8.
