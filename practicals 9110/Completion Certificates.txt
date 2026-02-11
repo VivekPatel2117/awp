@@ -1,0 +1,1100 @@
+﻿Practical 1 A
+**Practical 1A  Feature engineering on Categorical and Numerical data**
+import numpy as np
+import pandas as pd
+
+
+titanic=pd.read_csv("/content/titanic - titanic.csv")
+titanic.head
+data1=titanic.copy()
+data1.isnull()
+data1.isnull().sum()
+print('total passengers with values in all variables: ',data1.dropna().shape[0])
+print('total passengers in the titanic: ',data1.shape[0])
+print('total passengers with missing values: ',data1.dropna().shape[0]/ np.float64(data1.shape[0]))
+data1['Age_NA']=np.where(data1['Age'].isnull(),1,0)
+data1.head()
+print(data1.Age.mean())
+(data1.Age.median())
+data1['Age'] = data1['Age'].fillna(data1['Age'].median())
+corr = data1.corr(numeric_only=True)
+corr
+cor=data1[['Age','Fare']].corr()
+cor
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.heatmap(cor, cmap='Spectral', annot=True)
+plt.title('000')
+plt.show()
+cor=data1[['Fare','Pclass']].corr()
+cor
+import seaborn as sns
+import matplotlib.pyplot as plt
+# Plot heatmap
+sns.heatmap(cor, cmap='viridis', annot=True)
+plt.title('000')
+plt.show()
+pd.get_dummies(data1['Sex']).head()
+pd.concat([data1['Sex'],pd.get_dummies(data1['Sex'])],axis=1).head()
+
+
+# **Practical 1B Feature Engineering on Data time feature**
+
+
+import pandas as pd
+import numpy as np
+path ="/content/loan - loan.csv"
+df=pd.read_csv(path)
+df.head()
+df.info()
+df['Date'] = pd.to_datetime(df['date_issued'])
+df['Month'] = df['Date'].dt.month
+df['date_issued:year'] = df['Date'].dt.year
+df['day'] = df ['Date'].dt.day
+df[['day', 'Month', 'date_issued:year']]
+df['date_issued:month'] = df['Date'].dt.month
+df['date_issued:day'] = df['Date'].dt.day
+df['date_issued:day_of_week'] = df['Date'].dt.day_of_week
+df['date_issued:day_of_year'] = df['Date'].dt.dayofyear
+
+
+df[['date_issued', 'date_issued:year', 'date_issued:month',
+    'date_issued:day', 'date_issued:day_of_week',
+    'date_issued:day_of_year']].head()
+
+
+
+
+
+
+def week_part(day):
+    if day in [1, 2, 3, 4, 5, 6, 7]:
+        return "Week 1"
+    elif day in [8, 9, 10, 11, 12, 13, 14]:
+        return "Week 2"
+    elif day in [15, 16, 17, 18, 19, 20, 21]:
+        return "Week 3"
+    elif day in [22, 23, 24, 25, 26, 27, 28]:
+        return "Week 4"
+    elif day in [29, 30, 31]:
+        return "Week 5"
+
+
+
+
+df['date_issued:hour'] = df['Date'].dt.hour
+df['date_issued:Week_No'] = df['date_issued:day'].apply(week_part)
+df[['date_issued:day', 'date_issued:Week_No']].head()
+# **Practical 1C Feature Transformation**
+import pandas as pd
+import numpy as np
+url ='/content/Sample - Superstore - Sample - Superstore.csv'
+df_orders=pd.read_csv(url,encoding='latin1')
+df_orders.head()
+df_orders.columns
+df_orders.info
+
+
+
+
+**1.Transformation in type of data**
+
+
+df_orders['Profit']=df_orders['Profit'].astype('int64')
+df_orders['Segment']=df_orders['Segment'].astype('category')
+df_orders.info()
+
+
+**2.Custom Transformation**
+
+
+df_orders['UnitPrice']=df_orders['Sales']/df_orders['Quantity']
+df_orders[['Sales','Quantity','UnitPrice']].head()
+
+
+
+
+3.Log **Transformation**
+df_orders['Sales_log']= np.log(df_orders['Sales'])
+df_orders[['Sales','Sales_log']].head()
+
+
+df_orders['Sales_log2']= np.log2(df_orders['Sales'])
+df_orders[['Sales','Sales_log2']].head()
+
+
+df_orders['Sales_log10']= np.log10(df_orders['Sales'])
+df_orders[['Sales','Sales_log10']].head()
+
+
+
+
+4.Reciporcal **Transformation**
+df_orders["Sales_rep"]=np.reciprocal(df_orders["Sales"])
+df_orders[['Sales','Sales_rep']].head()
+
+
+
+
+
+
+
+
+**5.Square Transformation/power Transformation**
+df_orders['Quantity_sq']=np.power(df_orders['Quantity'],2)
+df_orders[['Quantity','Quantity_sq']].head()
+
+
+**6.SquareRoot Transformation**
+df_orders['Sales_sqrt']=np.sqrt(df_orders['Sales'])
+df_orders[['Sales','Sales_sqrt']].head()
+
+
+
+
+Practical 2
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+path='/content/Ecommerce Customers - Ecommerce Customers.csv'
+df=pd.read_csv(path)
+df.head()
+df.describe()
+df.info()
+import seaborn as sns
+sns.jointplot(x=df['Time on Website'],y=df['Yearly Amount Spent'],label='Time on Website')
+plt.suptitle('000',y=1.02)
+sns.jointplot(x=df['Time on App'],y=df['Yearly Amount Spent'])
+plt.suptitle('000',y=1.02)
+sns.jointplot(x=df['Time on App'],y=df['Yearly Amount Spent'],kind='kde')
+plt.suptitle('000',y=1.02)
+sns.pairplot(df)
+plt.suptitle('000',y=1.02)
+
+
+**Training and Testing Data Split**
+y=df['Yearly Amount Spent']
+X=df[['Avg. Session Length','Time on App','Time on Website','Length of Membership']]
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test=train_test_split  (X,y,test_size=0.3,random_state=9108)
+X_train
+X_test
+y_train
+y_test
+
+
+**Training the Model**
+from sklearn.linear_model import LinearRegression
+lm=LinearRegression()
+lm.fit(X_train,y_train)
+print('Coefficients:\n',lm.coef_)
+print('Intercept:\n',lm.intercept_)
+
+
+**Predicting Test Data**
+
+
+predictions=lm.predict(X_test)
+predictions
+
+
+**Evaluating The Model**
+from sklearn import metrics
+print('MAE:',metrics.mean_absolute_error(y_test,predictions))
+print('MSE:',metrics.mean_squared_error(y_test,predictions))
+print('RMSE:',np.sqrt(metrics.mean_squared_error(y_test,predictions)))
+
+
+**Residuals**
+import seaborn as sns
+sns.distplot((y_test-predictions),bins=50)
+plt.suptitle('000',y=1.02)
+
+
+**Conclusion**
+coeffecients=pd.DataFrame(lm.coef_,X.columns)
+coeffecients.columns=['Coeffecient']
+coeffecients
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import Ridge
+
+
+x=df[['Time on Website']]
+y=df['Yearly Amount Spent']
+X_train,X_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=42)
+degree=2
+ploy_features=PolynomialFeatures(degree=degree,include_bias=False)
+X_poly=ploy_features.fit_transform(X_train)
+poly_reg=LinearRegression()
+poly_reg.fit(X_poly,y_train)
+
+
+X_test_poly=ploy_features.transform(X_test)
+poly_pred=poly_reg.predict(X_test_poly)
+X_train
+X_poly
+
+
+#Linear Regression
+linear_reg=LinearRegression()
+linear_reg.fit(X_train,y_train)
+linear_pred=linear_reg.predict(X_test)
+#Lasso Regression
+alpha_lasso=0.1
+lasso_reg=Lasso(alpha=alpha_lasso)
+lasso_reg.fit(X_train,y_train)
+lasso_pred=lasso_reg.predict(X_test)
+# Ridge Regression
+ridge_reg = Ridge(alpha=1.0)  # You can change the regularization strength
+ridge_reg.fit(X_train, y_train)
+ridge_pred = ridge_reg.predict(X_test)
+
+
+# Evaluate and compare the models
+print("Linear Regression MSE:", mean_squared_error(y_test, linear_pred))
+print("Polynomial Regression (Degree=2) MSE:", mean_squared_error(y_test, poly_pred))
+print("Lasso Regression (alpha=1.0) MSE:", mean_squared_error(y_test, lasso_pred))
+print("Ridge Regression (alpha=1.0) MSE:", mean_squared_error(y_test, ridge_pred))
+
+
+# Plot results
+plt.scatter(X_test, y_test, color='black', label='Actual data')
+plt.plot(X_test, linear_pred, color='red', label='Linear Regression')
+plt.legend()
+plt.xlabel('Time on website')
+plt.ylabel('Yearly Amount Spent')
+plt.title('Comparison of Regression Models')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+
+
+plt.scatter(X_test, y_test, color='black', label='Actual data')
+plt.plot(X_test, poly_pred, color='blue', label='Polynomial Regression (degree=2)')
+plt.legend()
+plt.xlabel('Time on website')
+plt.ylabel('Yearly Amount Spent')
+plt.title('Comparison of Regression Models')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+
+
+
+
+plt.scatter(X_test, y_test, color='black', label='Actual data')
+plt.plot(X_test, lasso_pred, color='green', label='Lasso Regression (alpha=1.0)')
+plt.legend()
+plt.xlabel('Time on website')
+plt.ylabel('Yearly Amount Spent')
+plt.title('Comparison of Regression Models')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+plt.scatter(X_test, y_test, color='black', label='Actual data')
+plt.plot(X_test, ridge_pred, color='purple', label='Ridge Regression (alpha=1.0)')
+plt.legend()
+plt.xlabel('Time on website')
+plt.ylabel('Yearly Amount Spent')
+plt.title('Comparison of Regression Models')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Practical 3
+
+
+from google.colab import drive
+drive.mount('/content/drive')
+
+
+import pandas as pd
+
+
+df=pd.read_csv("/content/drive/MyDrive/Classroom/WA_Fn-UseC_-Telco-Customer-Churn - WA_Fn-UseC_-Telco-Customer-Churn.csv")
+
+
+df.head()
+df.info()
+
+
+df = df.drop(['customerID'], axis = 1)
+df.head()
+
+
+df['TotalCharges'] = pd.to_numeric(df.TotalCharges, errors='coerce')
+df.isnull().sum()
+
+
+df.drop(labels=df[df['tenure'] == 0].index, axis=0, inplace=True)
+df[df['tenure'] == 0].index
+
+
+df.fillna(df["TotalCharges"].mean())
+
+
+df["SeniorCitizen"] = df["SeniorCitizen"].map({0: "No", 1: "Yes"})
+df.head()
+
+
+df["InternetService"].describe(include=['object', 'bool'])
+
+
+df["Churn"][df["Churn"]=="No"].groupby(by=df["gender"]).count()
+
+
+df["Churn"][df["Churn"]=="No"].groupby(by=df["gender"]).count()
+
+
+import plotly.express as px
+fig = px.histogram(
+    df,
+    x="Churn",
+    color="Contract",
+    barmode="group",
+    title="<b>Customer contract distribution</b><br><sup>Diksha shitole 9105</sup>"
+)
+fig.update_layout(width=700, height=500, bargap=0.1)
+fig.show()
+
+
+
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
+def object_to_int(dataframe_series):
+    if dataframe_series.dtype=='object':
+        dataframe_series = LabelEncoder().fit_transform(dataframe_series)
+    return dataframe_series
+
+
+df = df.apply(lambda x: object_to_int(x))
+df.head()
+
+
+X = df.drop(columns = ['Churn'])
+y = df['Churn'].values
+
+
+y
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+
+from sklearn.metrics import recall_score, confusion_matrix, precision_score, f1_score, accuracy_score, classification_report
+
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size = 0.30, random_state = 40, stratify=y)
+
+
+lr_model = LogisticRegression()
+lr_model.fit(X_train,y_train)
+accuracy_lr = lr_model.score(X_test,y_test)
+print("Logistic Regression accuracy is :",accuracy_lr)
+
+
+lr_pred = lr_model.predict(X_test)
+report = classification_report(y_test,lr_pred)
+print(report)
+
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+plt.figure(figsize=(4,3))
+sns.heatmap(confusion_matrix(y_test, lr_pred),
+            annot=True,fmt = "d",linecolor="k",linewidths=3)
+
+
+plt.title("LOGISTIC REGRESSION CONFUSION MATRIX",fontsize=14)
+plt.suptitle('Diksha shitole 9105',y=1.02)
+plt.show()
+
+
+Practical 4
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+from google.colab import drive
+drive.mount('/content/drive')
+import pandas as pd
+path="/content/iphone_purchase_records.csv"
+dataset=pd.read_csv(path)
+dataset['log_Age']=np.log(dataset['Age'])
+dataset['log_Sal']=np.log(dataset['Salary'])
+dataset.head()
+sns.swarmplot(y='Salary',x='Purchase Iphone',hue='Gender',data=dataset)
+plt.title('000')
+plt.show()
+sns.countplot(x='Gender',hue='Purchase Iphone',data=dataset)
+plt.title('000')
+plt.show()
+sns.scatterplot(x='Age',y='Salary',hue='Purchase Iphone',data=dataset)
+plt.title('000')
+plt.show()
+
+
+X=np.array(dataset[['Gender','log_Age','log_Sal']])
+Y=np.array(dataset['Purchase Iphone'])
+from sklearn.preprocessing import LabelEncoder
+LabelEncoder_gender=LabelEncoder()
+X[:,0]=LabelEncoder_gender.fit_transform(X[:,0])
+X
+from sklearn.model_selection import train_test_split
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y,test_size=0.25,random_state=0)
+from sklearn.preprocessing import StandardScaler
+ss_X=StandardScaler()
+X_train=ss_X.fit_transform(X_train)
+X_test=ss_X.transform(X_test)
+
+
+X_train
+X_test
+from sklearn.svm import SVC
+classifier=SVC(kernel="linear",random_state=0)
+classifier.fit(X_train,Y_train)
+Y_pred=classifier.predict(X_test)
+from sklearn import metrics
+cm=metrics.confusion_matrix(Y_test,Y_pred)
+print(cm)
+accuracy=metrics.accuracy_score(Y_test,Y_pred)
+print("Accuracy score:",accuracy)
+precision=metrics.precision_score(Y_test,Y_pred)
+print("Precision score:",precision)
+recall=metrics.recall_score(Y_test,Y_pred)
+print("Recall score:",recall)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Practical 5
+
+
+from sklearn import datasets
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+
+
+# Load dataset
+iris = datasets.load_iris()
+
+
+# Create DataFrame
+irs = pd.DataFrame(iris.data, columns=iris.feature_names)
+irs['class'] = iris.target
+
+
+irs.info()
+irs['class'].value_counts()
+# Features and target
+x = irs.iloc[:, :-1].values
+y = irs.iloc[:, 4].values
+
+
+# Train-test split
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, test_size=0.20
+)
+
+
+x_train
+x_test
+y_train
+y_test
+
+
+# Feature scaling
+scaler = StandardScaler()
+scaler.fit(x_train)
+
+
+x_train = scaler.transform(x_train)
+x_test = scaler.transform(x_test)
+
+
+x_train
+x_test
+y_train
+Y_test
+
+
+# KNN classifier
+classifier = KNeighborsClassifier(n_neighbors=5)
+classifier.fit(x_train, y_train)
+
+
+# Prediction
+y_pred = classifier.predict(x_test)
+
+
+# Evaluation
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+
+# Prediction
+y_pred = classifier.predict(x_test)
+
+
+# Evaluation
+print(confusion_matrix(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+
+
+
+
+
+Practical 6
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from mpl_toolkits.mplot3d import Axes3D
+%matplotlib inline
+
+
+from google.colab import drive
+drive.mount('/content/drive')
+path="/content/sample_data/Mall_Customers - Mall_Customers.csv"
+data= pd.read_csv(path)
+#Distribution of Annual Income
+plt.figure(figsize=(10, 6))
+sns.set(style='whitegrid')
+sns.distplot(data['Annual Income (k$)'])
+plt.title('Distribution of Annual Income (k$)', fontsize=20)
+plt.xlabel('Range of Annual Income (k$)')
+plt.ylabel('Count')
+plt.suptitle('Diksha .K. Shitole 9105',y=1.02)
+
+
+#Distribution of age
+plt.figure(figsize=(10, 6))
+sns.set(style='whitegrid')
+sns.distplot(data['Age'])
+plt.title('Distribution of Age', fontsize=20)
+plt.xlabel('Range of Age')
+plt.ylabel('Count')
+plt.suptitle('”8',y=1.02)
+
+
+data[['Age','Annual Income (k$)','Spending Score (1-100)']].corr()
+
+
+#Distribution of spending score
+plt.figure(figsize=(10,6))
+sns.set(style='whitegrid')
+sns.distplot(data['Spending Score (1-100)'])
+plt.title('Distribution of Spending Score (1-100)', fontsize = 20)
+plt.xlabel('Range of Spending Score (1-100)')
+plt.ylabel('Count')
+plt.suptitle('000',y=1.02)
+
+
+genders = data.Gender.value_counts()
+sns.set_style("darkgrid")
+plt.figure(figsize=(10,4))
+sns.barplot(x=genders.index, y=genders.values)
+plt.title('Gender')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+
+
+
+
+plt.figure(figsize=(10,6))
+sns.scatterplot(x='Age', y='Annual Income (k$)', hue='Gender', data=data, s=60)
+plt.xlabel('Age')
+plt.ylabel('Annual Income (k$)')
+plt.title('Age vs Annual Income vs Gender')
+plt.legend()
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+
+
+plt.figure(figsize=(10,6))
+sns.scatterplot(x='Annual Income (k$)', y='Spending Score (1-100)', hue='Gender', data=data, s=60)
+plt.title('Spending score (1-100) vs Annual Income(K$)')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.suptitle('000',y=1.02)
+plt.legend()
+plt.show()
+
+
+age18_25 = data.Age[(data.Age <= 25) & (data.Age >= 18)]
+age26_35 = data.Age[(data.Age <= 35) & (data.Age >= 26)]
+age36_45 = data.Age[(data.Age <= 45) & (data.Age >= 36)]
+age46_55 = data.Age[(data.Age <= 55) & (data.Age >= 46)]
+age55above = data.Age[data.Age >= 56]
+
+
+x = ['18-25','26-35','36-45','46-55','55+']
+y = [len(age18_25.values),len(age26_35.values),len(age36_45.values),len(age46_55.values),len(age55above.values)]
+
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=x, y=y)
+plt.title('Customer and Ages Barplot')
+plt.xlabel('Age')
+plt.ylabel('Number of Customers')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+
+
+ss1_20 = data['Spending Score (1-100)'][(data['Spending Score (1-100)'] >= 1) & (data['Spending Score (1-100)'] <= 20)]
+ss21_40 = data['Spending Score (1-100)'][(data['Spending Score (1-100)'] >= 21) & (data['Spending Score (1-100)'] <= 40)]
+ss41_60 = data['Spending Score (1-100)'][(data['Spending Score (1-100)'] >= 41) & (data['Spending Score (1-100)'] <= 60)]
+ss61_80 = data['Spending Score (1-100)'][(data['Spending Score (1-100)'] >= 61) & (data['Spending Score (1-100)'] <= 80)]
+ss81_100 = data['Spending Score (1-100)'][(data['Spending Score (1-100)'] >= 81) & (data['Spending Score (1-100)'] <= 100)]
+
+
+score_x = ['1-20', '21-40', '41-60', '61-80', '81-100']
+score_y = [len(ss1_20.values), len(ss21_40.values), len(ss41_60.values), len(ss61_80.values), len(ss81_100.values)]
+
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=score_x, y=score_y, palette="Set2")
+plt.title("Spending Score")
+plt.xlabel("Score")
+plt.ylabel("Number of Customer Having the Spending Score In That Range")
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+ai0_30 = data['Annual Income (k$)'][(data['Annual Income (k$)'] >= 0) & (data['Annual Income (k$)'] <= 30)]
+ai31_60 = data['Annual Income (k$)'][(data['Annual Income (k$)'] >= 31) & (data['Annual Income (k$)'] <= 60)]
+ai61_90 = data['Annual Income (k$)'][(data['Annual Income (k$)'] >= 61) & (data['Annual Income (k$)'] <= 90)]
+ai91_120 = data['Annual Income (k$)'][(data['Annual Income (k$)'] >= 91) & (data['Annual Income (k$)'] <= 120)]
+ai121_150 = data['Annual Income (k$)'][(data['Annual Income (k$)'] >= 121) & (data['Annual Income (k$)'] <= 150)]
+
+
+income_x = ['$ 0 - 30,000', '$ 30,001 - 60,000', '$ 60,001 - 90,000', '$ 90,001 - 120,000', '$ 120,001 - 150,000']
+income_y = [len(ai0_30.values), len(ai31_60.values), len(ai61_90.values), len(ai91_120.values), len(ai121_150.values)]
+
+
+plt.figure(figsize=(10,6))
+sns.barplot(x=income_x, y=income_y, palette="nipy_spectral_r")
+plt.title("Annual Incomes")
+plt.xlabel("Income")
+plt.ylabel("Number of Customer")
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+data
+#Clustering based on 2 features
+
+
+#We take just the Annual Income and Spending score
+df1 = data[['CustomerID','Gender','Age','Annual Income (k$)','Spending Score (1-100)']]
+X = df1[['Annual Income (k$)','Spending Score (1-100)']]
+
+
+X.head()
+#Scatterplot of the input data
+plt.figure(figsize=(10,6))
+sns.scatterplot(x='Annual Income (k$)', y='Spending Score (1-100)', data=X, s=60)
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.title('Spending Score (1-100) vs Annual Income (k$)')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+# Importing KMeans fro sklearn
+from sklearn.cluster import KMeans
+wcss=[]
+for i in range(1,11):
+  km=KMeans(n_clusters=i)
+  km.fit(X)
+  wcss.append(km.inertia_)
+# the elbow curve
+plt.figure(figsize=(12,6))
+plt.plot(range(1,11),wcss)
+plt.plot(range(1,11),wcss,linewidth=2,color='red',marker='8')
+plt.xlabel('K Value')
+plt.xticks(np.arange(1,11,1))
+plt.ylabel('WCSS')
+plt.suptitle('000',y=1.02)
+plt.show()
+#Taking 5 clusters
+km1=KMeans(n_clusters=5)
+
+
+#Fitting the input data
+km1.fit(X)
+#Predicting the labels of the input data
+y=km1.predict(X)
+# Ading the labels toa column named label
+df1["label"]=y
+#The new dataframe with the clustering done
+df1.head()
+
+
+#Scatterplot of the clusters
+plt.figure(figsize=(10,6))
+sns.scatterplot(x='Annual Income (k$)', y='Spending Score (1-100)', hue='label',
+                palette=['green','orange','brown','dodgerblue','red'], legend='full', data=df1, s=60)
+
+
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.title('Spending Score (1-100) vs Annual Income (k$)')
+plt.suptitle('000',y=1.02)
+plt.show()
+
+
+cust0 = df1[df1["label"]==0]
+print('Number of customer in 0th group=', len(cust0))
+print('They are -', cust0["CustomerID"].values)
+
+
+cust1 = df1[df1["label"]==1]
+print('Number of customer in 1st group=', len(cust1))
+print('They are -', cust1["CustomerID"].values)
+
+
+
+
+cust2 = df1[df1["label"]==2]
+print('Number of customer in 2nd group=', len(cust2))
+print('They are -', cust2["CustomerID"].values)
+
+
+cust3 = df1[df1["label"]==3]
+print('Number of customer in 3rd group=', len(cust3))
+print('They are -', cust3["CustomerID"].values)
+
+
+cust4 = df1[df1["label"]==4]
+print('Number of customer in 4th group=', len(cust4))
+print('They are -', cust4["CustomerID"].values)
+
+
+
+
+Practical 7
+
+
+
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+X = np.array(
+[[12,15],[17,19],[71,81],[7,8],[75,60],[80,87],
+ [97,93],[11,25],[40,50],[30,27]])
+labels = range(1,11)
+plt.figure(figsize = (10, 7))
+plt.subplots_adjust(bottom = 0.1)
+plt.scatter(X[:,0],X[:,1], label = 'True Position')
+for label, x, y in zip(labels, X[:, 0], X[:, 1]):
+    plt.annotate(label,xy = (x, y), xytext = (-3, 3),
+                 textcoords = 'offset points',
+                 ha = 'right', va = 'bottom')
+    plt.suptitle("000")
+plt.show()
+
+
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+linked = linkage(X, 'average')
+labelList = range(1, 11)
+plt.figure(figsize=(5, 5))
+dendrogram(linked,orientation='top',labels=labelList,distance_sort='descending',show_leaf_counts=True)
+plt.suptitle("000")
+plt.show()
+
+
+
+
+
+
+from sklearn.cluster import AgglomerativeClustering
+
+
+cluster = AgglomerativeClustering(n_clusters=3,metric='euclidean',linkage='ward')
+cluster.fit_predict(X)
+
+
+
+
+X = np.array([
+    [12,15],[17,19],[71,81],[7,8],[75,60],
+    [80,87],[97,93],[11,25],[40,50],[30,27]
+])
+
+
+plt.scatter(X[:,0], X[:,1])
+plt.show()
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+
+
+linked = linkage(X, method='average')
+labelList = range(1, 11)
+
+
+dendrogram(linked,orientation='top',labels=labelList,distance_sort='descending',show_leaf_counts=True)
+plt.show()
+from scipy.cluster.hierarchy import dendrogram, linkage
+import matplotlib.pyplot as plt
+
+
+linked = linkage(X, method='average')
+labelList = range(1, 11)
+
+
+dendrogram(linked,orientation='top',labels=labelList,distance_sort='descending',show_leaf_counts=True)
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Practical 8A
+
+
+
+
+!pip install apyori
+
+
+import pandas as pd
+import numpy as np
+from apyori import apriori
+
+
+
+
+
+
+path = "/content/Market_Basket_Optimisation - Market_Basket_Optimisation (1).csv"
+df= pd.read_csv(path)
+
+
+df.head()
+
+
+df.fillna(0,inplace=True)
+
+
+df.head()
+
+
+transactions = []
+
+
+for i in range(len(df)):
+    transactions.append([str(x) for x in df.iloc[i] if str(x) != ''])
+
+
+rules = apriori(transactions,
+                min_support=0.003,
+                min_confidence=0.2,
+                min_lift=3,
+                min_length=2)
+
+
+results = list(rules)
+
+
+results
+rows = []
+
+
+for item in results:
+    pair = item.items
+    support = item.support
+
+
+    for stat in item.ordered_statistics:
+        lhs = ', '.join(stat.items_base)
+        rhs = ', '.join(stat.items_add)
+        confidence = stat.confidence
+        lift = stat.lift
+
+
+        rows.append([lhs, rhs, support, confidence, lift])
+
+
+df_final = pd.DataFrame(rows, columns=['lhs','rhs','support','confidence','lift'])
+df_final.head()
+
+
+df_final.sort_values('lift', ascending=False).head(10)
+
+
+transactions = []
+
+
+for i in range(0,len(df)):
+    transactions.append([str(df.values[i,j]) for j in range(0,20) if str(df.values[i,j])!='0'])
+
+
+transactions[0]
+transactions[1]
+
+
+rules = apriori(transactions, min_support=0.003, min_confidence=0.2, min_lift=3, min_length=2)
+
+
+Results = list(rules)
+Results
+
+
+df_results = pd.DataFrame(Results)
+df_results.head()
+
+
+support = df_results.support
+
+
+first_values = []
+second_values = []
+third_values = []
+fourth_value = []
+
+
+for i in range(df_results.shape[0]):
+    single_list = df_results['ordered_statistics'][i][0]
+    first_values.append(list(single_list[0]))
+    second_values.append(list(single_list[1]))
+    third_values.append(single_list[2])
+    fourth_value.append(single_list[3])
+
+
+lhs = pd.DataFrame(first_values)
+rhs = pd.DataFrame(second_values)
+confidence=pd.DataFrame(third_values,columns=['confidence'])
+lift=pd.DataFrame(fourth_value,columns=['lift'])
+
+
+df_final = pd.concat([lhs,rhs,support,confidence,lift], axis=1)
+
+
+df_final.fillna(value=' ', inplace=True)
+df_final.head()
+
+
+df_final['lhs'] = df_final['lhs_item_1'] + str(', ') + df_final['lhs_item_2'] + str(', ') + df_final['lhs_item_3']
+df_final['rhs'] = df_final['rhs_item_1'] + str(', ') + df_final['rhs_item_2'] + str(', ') + df_final['rhs_item_3']
+
+
+df_final['lhs'] = df_final['lhs'].str.replace(',   ,  ', '').str.replace(',  ', ', ').str.strip()
+df_final['rhs'] = df_final['rhs'].str.replace(',   ,  ', '').str.replace(',  ', ', ').str.strip()
+
+
+df_final.head()
+df_final.columns = ['lhs_item_1','lhs_item_2','lhs_item_3','rhs_item_1','rhs_item_2','rhs_item_3','support','confidence','lift']
+df_final.head()
+df_final.drop(columns=['lhs_item_1','lhs_item_2','lhs_item_3','rhs_item_1','rhs_item_2','rhs_item_3'],inplace=True)
+df_final.head()
+df_final.sort_values('lift', ascending=False).head(10)
+
+
+
+
+
+
+Practical 8B
+
+
+import pandas as pd
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import fpgrowth
+
+
+dataset = [
+    ['Milk', 'Onion', 'Nutmeg', 'Kidney Beans', 'Eggs', 'Yogurt'],
+    ['Dill', 'Onion', 'Nutmeg', 'Kidney Beans', 'Eggs', 'Yogurt'],
+    ['Milk', 'Apple', 'Kidney Beans', 'Eggs'],
+    ['Milk', 'Unicorn', 'Corn', 'Kidney Beans', 'Yogurt'],
+    ['Corn', 'Onion', 'Onion', 'Kidney Beans', 'Ice cream', 'Eggs']
+]
+
+
+te = TransactionEncoder()
+te_array = te.fit(dataset).transform(dataset)
+
+
+df = pd.DataFrame(te_array, columns=te.columns_)
+df
+
+
+fpgrowth(df, min_support=0.6, use_colnames=True)
